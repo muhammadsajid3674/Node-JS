@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const PORT = 3000;
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(__dirname + '/src/index.html')
 })
 
 app.post('/', (req, res) => {
