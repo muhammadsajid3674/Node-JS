@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const TodoModel = require('./model/todoSchema');
+const Router = require('./routes');
 require('dotenv').config();
 
 const app = express();
@@ -14,89 +14,6 @@ mongoose.connect(DBURI).then(res => console.log("Mongo-DB is connected")).catch(
 
 const PORT = process.env.PORT || 5000;
 
-app.post('/api/todo', (req, res) => {
-    const { todo } = req.body;
-    if (!todo) {
-        res.json({
-            message: 'Required field is missing',
-            status: false,
-        });
-        return;
-    }
-    const objToSend = {
-        todo: todo,
-    }
-    TodoModel.create(objToSend)
-        .then(data => {
-            res.json({
-                message: 'Todo added',
-                status: true,
-                todo: data
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: `Internal Error: ${err}`,
-                status: true,
-            })
-        })
-})
-
-app.get('/api/todo', (req, res) => {
-    TodoModel.find({})
-        .then(data => {
-            res.json({
-                message: 'Todo Get',
-                status: true,
-                todo: data
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: `Internal Error: ${err}`,
-                status: true,
-            })
-        })
-})
-
-app.put('/api/todo', (req, res) => {
-    const { todo, id } = req.body;
-    const objToSend = {
-        todo: todo
-    }
-    TodoModel.findByIdAndUpdate(id, objToSend)
-        .then(data => {
-            res.json({
-                message: 'Todo Uppdated',
-                status: true,
-                todo: data
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: `Internal Error: ${err}`,
-                status: true,
-            })
-        })
-})
-
-app.delete('/api/todo/:id', (req, res) => {
-    const { id } = req.params;
-    TodoModel.findByIdAndDelete(id)
-        .then(data => {
-            res.json({
-                message: 'Todo Deleted',
-                status: true,
-                todo: data
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: `Internal Error: ${err}`,
-                status: true,
-            })
-        })
-
-})
+app.use(Router)
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`))
