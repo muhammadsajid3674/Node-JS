@@ -1,6 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BASE_URL } from './config/baseURL';
 
 function App() {
   const [text, setText] = useState(null)
@@ -11,7 +12,7 @@ function App() {
     const objToSend = {
       todo: text,
     }
-    axios.post('http://localhost:5000/api/todo', objToSend)
+    axios.post(`${BASE_URL}/todo`, objToSend)
       .then(res => {
         if (res.data.status) {
           setRefresh(!refresh)
@@ -23,7 +24,7 @@ function App() {
   }
 
   const deleteTodo = (id) => {
-    axios.delete(`http://localhost:5000/api/todo/${id}`)
+    axios.delete(`${BASE_URL}/todo/${id}`)
       .then(res => {
         if (res.data.status) {
           setRefresh(!refresh)
@@ -40,7 +41,7 @@ function App() {
       id: id,
       todo: newValue
     }
-    axios.put(`http://localhost:5000/api/todo`, objToSend)
+    axios.put(`${BASE_URL}/todo`, objToSend)
       .then(res => {
         if (res.data.status) {
           setRefresh(!refresh)
@@ -52,7 +53,7 @@ function App() {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/todo')
+    axios.get(`${BASE_URL}/todo`)
       .then(res => setTodo(res.data.todo))
       .catch(err => console.log(err))
   }, [refresh])
