@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../env.config.js'
 
 const userSchema = new Schema({
-    number: {
+    email: {
         type: String,
         required: true
     },
@@ -14,7 +14,7 @@ const userSchema = new Schema({
 userSchema.methods.generateJWT = function () {
     const token = jwt.sign({
         _id: this._id,
-        number: this.number
+        email: this.email
     }, JWT_SECRET, { expiresIn: "7d" })
     return token
 };
